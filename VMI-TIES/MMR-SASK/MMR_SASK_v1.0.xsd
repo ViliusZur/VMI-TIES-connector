@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:sask="urn:sti:ties:sask:v1"
+        targetNamespace="urn:sti:ties:sask:v1" elementFormDefault="qualified" version="1.0">
+  <element name="VMI-SASK">
+    <complexType>
+      <sequence>
+        <element name="MessageSpec" type="sask:MessageSpec_Type">
+          <annotation>
+            <documentation xml:lang="lt">Pranešimo duomenys, apibūdinantys rinkmeną.</documentation>
+          </annotation>
+        </element>
+        <element name="MessageBody" type="sask:MessageBody_Type">
+          <annotation>
+            <documentation xml:lang="lt">Pradinio arba koreguojančio pranešimo turinys (body)</documentation>
+          </annotation>
+        </element>
+      </sequence>
+      <attribute name="version" type="float" use="required">
+        <annotation>
+          <documentation xml:lang="lt">Pranešimo XML struktūrų aprašo versija. Tai viso pranešimo elementas (atributas), jame nurodytos versijos struktūros aprašą turi atitikti antraštė ir pagrindinės rinkmenos dalis.</documentation>
+        </annotation>
+      </attribute>
+    </complexType>
+  </element>
+  <!--++++++++++-->
+  <simpleType name="MessageType_EnumType">
+    <annotation>
+      <documentation xml:lang="lt">Pranešimo tipas</documentation>
+    </annotation>
+    <restriction base="string">
+      <enumeration value="MMR-SASK">
+        <annotation>
+          <documentation xml:lang="lt">Vienintelė galima reikšmė "MMR-SASK"</documentation>
+        </annotation>
+      </enumeration>
+    </restriction>
+  </simpleType>
+  <!--++++++++++-->
+  <simpleType name="MessageRefId_Type">
+    <annotation>
+      <documentation xml:lang="lt">MessageRefId</documentation>
+    </annotation>
+    <restriction base="string">
+      <maxLength value="60"></maxLength>
+    </restriction>
+  </simpleType>
+  <!--++++++++++-->
+  <complexType name="MessageBody_Type">
+    <sequence>
+      <element name="Lydrastis" maxOccurs="1" type="sask:LydrastisT">
+        <annotation>
+          <documentation xml:lang="lt">Pranešimo antraštiniai duomenys.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+  <complexType name="MessageSpec_Type">
+    <annotation>
+      <documentation xml:lang="lt">Pranešimo duomenys, apibūdinantys rinkmeną.</documentation>
+    </annotation>
+    <sequence>
+      <element name="Timestamp" type="dateTime">
+        <annotation>
+          <documentation xml:lang="lt">Pranešimo suformavimo data ir laikas.</documentation>
+        </annotation>
+      </element>
+      <element name="MessageType" type="sask:MessageType_EnumType">
+        <annotation>
+          <documentation xml:lang="lt">Siunčiamo pranešimo tipas, nusakantis duomenų rinkinį, jo paskirtį.</documentation>
+        </annotation>
+      </element>
+      <element name="MessageRefId" type="sask:MessageRefId_Type">
+        <annotation>
+          <documentation xml:lang="lt">Unikalus pranešimo identifikavimo numeris.</documentation>
+        </annotation>
+      </element>
+      <element name="ReportingSubject">
+        <complexType>
+          <sequence>
+            <element name="TeikejoId" minOccurs="0">
+              <annotation>
+                <documentation>Unikalus Teikėjo identifikatorius, suteiktas VMI. Šis identifikatorius išlieka pastovus nepriklausomai nuo Teikėjo kitų duomenų keitimų</documentation>
+              </annotation>
+              <simpleType>
+                <restriction base="string">
+                  <maxLength value="30"></maxLength>
+                </restriction>
+              </simpleType>
+            </element>
+            <element name="JAKodas">
+              <annotation>
+                <documentation xml:lang="lt">Teikėjo juridinio asmens kodas.</documentation>
+              </annotation>
+              <simpleType>
+                <restriction base="string">
+                  <length value="9"/>
+                </restriction>
+              </simpleType>
+            </element>
+            <element name="Name">
+              <annotation>
+                <documentation xml:lang="lt">Teikėjo pavadinimas.</documentation>
+              </annotation>
+              <simpleType>
+                <restriction base="string">
+                  <maxLength value="200"/>
+                </restriction>
+              </simpleType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Contact" minOccurs="0">
+        <annotation>
+          <documentation xml:lang="lt">Teikėjo kontaktai.</documentation>
+        </annotation>
+        <simpleType>
+          <restriction base="string">
+            <maxLength value="250"></maxLength>
+          </restriction>
+        </simpleType>
+      </element>
+    </sequence>
+  </complexType>
+  <!--++++++++++-->
+  <complexType name="LydrastisT">
+    <sequence>
+      <element name="Saskaitos">
+	  <annotation>
+          <documentation>Teikiama sąskaitų informacija.</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element name="Saskaita" type="sask:SaskaitaT" minOccurs="1" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Seifai" minOccurs="0">
+	    <annotation>
+          <documentation>Teikiama seifų nuomos informacija.</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element name="Seifas" type="sask:SeifasT" maxOccurs="unbounded"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="NaudGavejai" minOccurs="0">
+        <annotation>
+          <documentation>Teikiama naudos gavėjų informacija.</documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element name="Klientas" maxOccurs="unbounded">
+              <annotation>
+                <documentation>Užsienio juridinis asmuo</documentation>
+              </annotation>
+              <complexType>
+                <sequence>
+                  <element name="NaudGavejas" type="sask:AsmuoT"/>
+                </sequence>
+                <attribute name="RefId" use="required">
+                  <annotation>
+                    <documentation>Įrašo ID Teikėjo sistemoje.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <maxLength value="30"/>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+                <attribute name="KODAS_UV" use="required">
+                  <annotation>
+                    <documentation>Identifikacinis kodas užsienio valstybėje.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <maxLength value="30">
+                        <annotation>
+                          <documentation>Kodas užsienio valstybėje</documentation>
+                        </annotation>
+                      </maxLength>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+                <attribute name="PAV" use="required">
+                  <annotation>
+                    <documentation>Asmens pavadinimas.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <maxLength value="120"/>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+                <attribute name="SALIS" use="required">
+                  <annotation>
+                    <documentation>Užsienio valstybės, kurioje yra registruotas asmuo,
+          raidinis dviženklis kodas pagal ISO šalių standartą.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <length value="2"/>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+                <attribute name="ADR">
+                  <annotation>
+                    <documentation>Asmens adresas.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <maxLength value="150"/>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+                <attribute name="DATA_NUO" type="date" use="required">
+                  <annotation>
+                    <documentation>Laikotarpio pradžios data.</documentation>
+                  </annotation>
+                </attribute>
+                <attribute name="DATA_IKI" type="date">
+                  <annotation>
+                    <documentation>Laikotarpio pabaigos data.</documentation>
+                  </annotation>
+                </attribute>
+                <attribute name="DEF">
+                  <annotation>
+                    <documentation>Šis laukas pildomas, kai reikia taisyti (tikslinti) arba šalinti anksčiau GAVĖJUI perduotus duomenis 
+					arba paneigti jų buvimą.</documentation>
+                  </annotation>
+                  <simpleType>
+                    <restriction base="string">
+                      <maxLength value="4"/>
+                    </restriction>
+                  </simpleType>
+                </attribute>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+    </sequence>
+    <attribute name="NR" type="int" use="required">
+      <annotation>
+        <documentation>Teikėjo suteiktas perduodamo lydraščio unikalus eilės numeris.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="ANKSTESNIS_NR" type="int">
+      <annotation>
+        <documentation>Prieš tai perduoto lydraščio unikalus numeris. 
+		Tarp einamojo lydraščio numerio ir ankstesnio lydraščio numerio negali egzistuoti kiti lydraščių numeriai. 
+		Tais atvejais, kai Teikėjas pateikia pirmą lydraštį, lauko "ANKSTESNIS_NR" reikšmė turi būti 0.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="FD" type="date" use="required">
+      <annotation>
+        <documentation> Perduodamo duomenų rinkinio suformavimo data.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+  <complexType name="SaskaitaT">
+    <sequence>
+      <element name="Atstovai" minOccurs="0">
+        <annotation>
+          <documentation>Teikiamas atstovų sąrašas. </documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element name="Atstovas" maxOccurs="unbounded">
+              <complexType>
+                <complexContent>
+                  <extension base="sask:AsmuoT">
+                    <attribute name="RefId" use="required">
+                      <annotation>
+                        <documentation>Įrašo ID Teikėjo sistemoje.</documentation>
+                      </annotation>
+                      <simpleType>
+                        <restriction base="string">
+                          <maxLength value="30"/>
+                        </restriction>
+                      </simpleType>
+                    </attribute>
+                    <attribute name="DATA_NUO" type="date" use="required">
+                      <annotation>
+                        <documentation>Laikotarpio pradžios data.</documentation>
+                      </annotation>
+                    </attribute>
+                    <attribute name="DATA_IKI" type="date">
+                      <annotation>
+                        <documentation>Laikotarpio pabaigos data.</documentation>
+                      </annotation>
+                    </attribute>
+                    <attribute name="DEF">
+                      <annotation>
+                        <documentation> Šis laukas pildomas, kai reikia taisyti (tikslinti)
+						arba šalinti anksčiau GAVĖJUI perduotus Duomenis arba paneigti jų buvimą.</documentation>
+                      </annotation>
+                      <simpleType>
+                        <restriction base="string">
+                          <maxLength value="4"/>
+                        </restriction>
+                      </simpleType>
+                    </attribute>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Savininkas" type="sask:AsmuoT"/>
+    </sequence>
+    <attribute name="RefId" use="required">
+      <annotation>
+        <documentation>Įrašo ID Teikėjo sistemoje.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="30"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="DATA" use="required" type="date">
+      <annotation>
+        <documentation>GAVĖJUI teikiamo įrašo suformavimo data ISO formatu:
+          MMMM-mm-dd, kur MMMM – metai, mm – mėnuo, dd – diena, pvz.:
+          2010-12-31.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="BN_KOD">
+      <annotation>
+        <documentation>Banko kodas – penkių ženklų LB suteiktas finansų įstaigos kodas.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <length value="5"></length>
+          <pattern value="\d{5}"></pattern>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="TYP" use="required">
+      <annotation>
+        <documentation>FRD asmenims atidarytos sąskaitų rūšis:1 – atsiskaitomoji (einamoji) sąskaita,4 – indėlio sąskaita,6 – paskolos sąskaita,7 – kaupiamoji sąskaita,8 – mokėjimo kortelės sąskaita,9 – kita sąskaita,10 - vertybinių popierių sąskaitą.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="integer">
+          <enumeration value="1"></enumeration>
+          <enumeration value="4"></enumeration>
+          <enumeration value="6"></enumeration>
+          <enumeration value="7"></enumeration>
+          <enumeration value="8"></enumeration>
+          <enumeration value="9"></enumeration>
+          <enumeration value="10"></enumeration>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="NR" use="required">
+      <annotation>
+        <documentation>Sąskaitos numeris.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="20"></maxLength>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="V_KOD" use="required">
+      <annotation>
+        <documentation> Valiutos raidinis triženklis kodas pagal ISO valiutų standartą.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <length value="3"></length>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="ADAT" type="date" use="required">
+      <annotation>
+        <documentation>Sąskaitos atidarymo data.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="UDAT" type="date">
+      <annotation>
+        <documentation> Sąskaitos uždarymo data. UDAT turi būti tokia pat arba vėlesnė už ADAT (atidarymo datą).</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="DEF">
+      <annotation>
+        <documentation> Šis laukas pildomas, kai reikia taisyti (tikslinti)
+          arba šalinti anksčiau GAVĖJUI perduotus Duomenis arba paneigti jų buvimą.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="4"></maxLength>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="KDATA" type="date" use="required">
+      <annotation>
+        <documentation> Duomenų įvedimo (koregavimo) kompiuterinė data.
+          Formuojant įrašą pirmą kartą, ši data turi sutapti su sąskaitos
+          atidarymo data.</documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+  <complexType name="SeifasT">
+    <sequence>
+      <element name="Atstovai" minOccurs="0">
+        <annotation>
+          <documentation>Teikiamas atstovų sąrašas. </documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element name="Atstovas" maxOccurs="unbounded">
+              <complexType>
+                <complexContent>
+                  <extension base="sask:AsmuoT">
+                    <attribute name="RefId" use="required">
+                      <annotation>
+                        <documentation>Įrašo ID Teikėjo sistemoje.</documentation>
+                      </annotation>
+                      <simpleType>
+                        <restriction base="string">
+                          <maxLength value="30"/>
+                        </restriction>
+                      </simpleType>
+                    </attribute>
+                    <attribute name="DATA_NUO" type="date" use="required">
+                      <annotation>
+                        <documentation>Laikotarpio pradžios data.</documentation>
+                      </annotation>
+                    </attribute>
+                    <attribute name="DATA_IKI" type="date">
+                      <annotation>
+                        <documentation>Laikotarpio pabaigos data.</documentation>
+                      </annotation>
+                    </attribute>
+                    <attribute name="DEF">
+                      <annotation>
+                        <documentation>Šis laukas pildomas, kai reikia taisyti (tikslinti)
+						arba šalinti anksčiau GAVĖJUI perduotus Duomenis arba paneigti jų buvimą.</documentation>
+                      </annotation>
+                      <simpleType>
+                        <restriction base="string">
+                          <maxLength value="4"/>
+                        </restriction>
+                      </simpleType>
+                    </attribute>
+                  </extension>
+                </complexContent>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="Nuomininkas" type="sask:AsmuoT"/>
+    </sequence>
+    <attribute name="RefId" use="required">
+      <annotation>
+        <documentation>Įrašo ID Teikėjo sistemoje.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="30"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="DATA" use="required" type="date">
+      <annotation>
+        <documentation>GAVĖJUI teikiamo įrašo suformavimo data ISO formatu:  MMMM-mm-dd, kur MMMM – metai, mm – mėnuo, dd – diena, pvz.: 2010-12-31.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="NR" use="required">
+      <annotation>
+        <documentation>Seifo kameros identifikacinis numeris.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="30"></maxLength>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="NUOMA_NUO" type="date" use="required">
+      <annotation>
+        <documentation>Seifo kameros nuomos pradžios data.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="NUOMA_IKI" type="date">
+      <annotation>
+        <documentation>Seifo kameros nuomos pabaigos data. Data turi būti tokia pat arba vėlesnė už pradžios datą. Nepildoma jeigu seifas išnuomotas neterminuotai. Tikslinama jeigu seifo kameros faktinė nuomos pabaigos data skiriasi nuo nuomos pabaigos datos.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="DEF">
+      <annotation>
+        <documentation>Šis laukas pildomas, kai reikia taisyti (tikslinti)
+          arba šalinti anksčiau GAVĖJUI perduotus Duomenis arba paneigti jų buvimą.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="4"></maxLength>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="KDATA" type="date" use="required">
+      <annotation>
+        <documentation>Duomenų įvedimo (koregavimo) kompiuterinė data.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="ADR" use="required">
+      <annotation>
+        <documentation>Finansų dalyvio ar jo padalinio adresas, kuriame yra seifo kamera.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="150"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+  </complexType>
+  <complexType name="AsmuoT">
+    <attribute name="TIP" use="required">
+      <annotation>
+        <documentation>Asmens tipas: F - fizinis asmuo; J - Juridinis asmuo</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <enumeration value="F"/>
+          <enumeration value="J"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="KOD">
+      <annotation>
+        <documentation>Asmens kodas:•	juridinių asmenų registre juridinių asmenų devyniaženklis kodas; •	fizinio asmens kodas; •	mokesčių mokėtojo identifikacinis numeris. KOD=0 kai sąskaitos rūšis 7 (kaupiamoji sąskaita).</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <pattern value="[0-9]{0,11}"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="VARD">
+      <annotation>
+        <documentation>Fizinio asmens vardas.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="120"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="PAV" use="required">
+      <annotation>
+        <documentation>Asmens pavadinimas/pavardė.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="120"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="GIM_DATA" type="date">
+      <annotation>
+        <documentation>Fizinio asmens gimimo data. Privaloma ne LT fiziniams asmenims.</documentation>
+      </annotation>
+    </attribute>
+    <attribute name="ADR">
+      <annotation>
+        <documentation>Asmens adresas.  Fizinio asmens (sąskaitos savininko) nuolatinės gyvenamosios vietos adresas . Privalomas ne LT asmenims.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="150"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="SALIS">
+      <annotation>
+        <documentation>Identifikacinį numerį suteikusios ar dokumentą išdavusios  užsienio valstybės raidinis dviženklis kodas pagal ISO šalių standartą. Privaloma ne LT asmenims.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <length value="2"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="KODAS_UV">
+      <annotation>
+        <documentation>Identifikacinis kodas užsienio valstybėje.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="30"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="DOK_TIPAS">
+      <annotation>
+        <documentation>Asmens dokumento tipas. Privaloma ne LT asmenims. Galimi dokumentų tipai pateikti priede Nr. 1.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <length value="2"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="DOK_NR">
+      <annotation>
+        <documentation>Dokumento numeris. Privaloma ne LT asmenims.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <maxLength value="30"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute name="PIL">
+      <annotation>
+        <documentation>Fizinio asmens pilietybė.
+          Pateikiama raidinis valstybės dviženklis kodas pagal ISO šalių standartą.</documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <length value="2"/>
+        </restriction>
+      </simpleType>
+    </attribute>
+  </complexType>
+</schema>

@@ -1,0 +1,14 @@
+Lithuanian Tax Authority TIES MMR-SASK (VMI TIES MMR-SASK) Connector
+
+1. Intro
+2. Tech stack
+3. Folder structure
+4. Generating package
+5. New account
+6. Update account
+7. Close account
+8. Dealing with errors
+9. Conclusion
+10. Special thanks
+11. Contacts
+12. References 

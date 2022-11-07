@@ -1,0 +1,26 @@
+{
+  "name": "vmi-connector",
+  "version": "1.0.0",
+  "description": "A Lithuanian Taxes TIES system (VMI TIES) connector",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViliusZur/VMI-TIES-connector.git"
+  },
+  "keywords": [
+    "Lithuanian",
+    "Taxes",
+    "VMI",
+    "TIES",
+    "connector"
+  ],
+  "author": "Vilius Žurauskas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ViliusZur/VMI-TIES-connector/issues"
+  },
+  "homepage": "https://github.com/ViliusZur/VMI-TIES-connector#readme"
+}

@@ -1,0 +1,16 @@
+These are some useful commands in case you need to create a new private key and public certificate for RebellionPay to use in Lithuanian Tax Authority TIES system.
+
+- To generate public cert and private key run this command in your console:
+openssl req -newkey rsa:2048 -nodes -keyout test_private_key6.key -x509 -days 365 -out ties_imone6.der -sha256 -subj "/C=LT/ST=Vilnius municipality/L=Vilnius/O=RebellionPay Fintech Services/CN=RebellionPay"
+
+- To create keystore (you need a keystore so we could generate JKS file):
+openssl pkcs12 -export -in ties_imone7.der -inkey test_private_key7.key -out keystore.p12
+
+- To convert keystore to JKS (you need a JKS file so you could use the private key and public cert in SOAP UI, SOAP UI is useful for testing) (to use SSL authentication in SOAP UI go to: File > Preferences > SSL Settings > choose your JKS file in KeyStore field > input your JKS file's password in KeyStore Password field):
+keytool -importkeystore -srckeystore keystore.p12 -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS
+
+- To test if Lithuanian Tax Authority accepts the new private key and public certificate in a keystore format (replace "psw123" password with your own) (you should receive an XML object in the response with all available SOAP methods):
+curl -v --cert-type P12 --cert testkeystore.p12:psw123 "https://ties.vmi.lt/TIESWebServiceDemo/TIESService?wsdl"
+
+- To test if Lithuanian Tax Authority accepts the new private key and public certificate (you should receive an XML object in the response with all available SOAP methods):
+curl -v -GET --key test_private_key7.key --cert ties_imone7.der "https://ties.vmi.lt/TIESWebServiceDemo/TIESService?WSDL"
