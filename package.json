@@ -2,8 +2,9 @@
   "name": "vmi-connector",
   "version": "1.0.0",
   "description": "A Lithuanian Taxes TIES system (VMI TIES) connector",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "scripts": {
+    "dev": "nodemon",
     "test": "npm run test"
   },
   "repository": {
@@ -22,5 +23,13 @@
   "bugs": {
     "url": "https://github.com/ViliusZur/VMI-TIES-connector/issues"
   },
-  "homepage": "https://github.com/ViliusZur/VMI-TIES-connector#readme"
+  "homepage": "https://github.com/ViliusZur/VMI-TIES-connector#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20"
+  }
 }
