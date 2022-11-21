@@ -12,4 +12,9 @@ module.exports = {
     privateKeyString: process.env.PRIVATE_KEY_STRING,
     publicCertString: process.env.PUBLIC_CERT_STRING,
   },
+  accountData: {
+    currency: process.env.CURRENCY,
+    accountType: process.env.ACCOUNT_TYPE,
+    bic: process.env.BIC,
+  }
 }

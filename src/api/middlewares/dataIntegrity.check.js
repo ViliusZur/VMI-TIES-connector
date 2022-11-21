@@ -1,36 +1,34 @@
+// packages
+const Joi = require('joi');
+
 /**
  * Middleware to check if data coming in is good
  */
- exports.checkDataIntegrity = async (req, res, next) => {
-  logger.debug('middlewares/control - rateLimitIncrement', 'START', req.info);
-
+const checkDataIntegrity = async (req, res, next) => {
+  console.log('Checking data integrity');
   try {
-    const user = req.user || undefined;
-    const endpoint = _generateEndpointString({
-      method: req.method,
-      baseUrl: req.baseUrl,
-      path: req.path,
-      params: req.params
+    const schema = Joi.object({
+      // add additional checks, for example max 2 letters in dnationality, iban regular expression, etc.
+      accountId: Joi.string().required(),
+      iban: Joi.string().required(),
+      accountOpened: Joi.date().iso().required(),
+      identityCode: Joi.string().required(),
+      docCountry: Joi.string().required(),
+      docType: Joi.string().required(),
+      docNumber: Joi.string().required(),
+      dateOfBirth: Joi.date().iso().required(),
+      nationality: Joi.string().required(),
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      address: Joi.string().required(),
     });
-    let ipAddress = req.ip;
-    if (req.headers && req.headers['x-real-ip']) ipAddress = req.headers['x-real-ip'];
 
-    logger.debug('middlewares/control - rateLimitIncrement', 'create RateLimit record', 'user', user ? user._id.toString() : undefined, req.info);
-    logger.debug('middlewares/control - rateLimitIncrement', 'create RateLimit record', 'ipAddress', ipAddress, req.info);
-    logger.debug('middlewares/control - rateLimitIncrement', 'create RateLimit record', 'endpoint', endpoint, req.info);
-    await RateLimit.createRateLimit({
-      user,
-      ipAddress,
-      endpoint,
-    }, req.info);
+    await schema.validateAsync(req.body);
 
     return next();
   } catch (error) {
-    logger.error('middlewares/control - rateLimitIncrement', error.message, req.info);
-    return libApiResponse.sendError({
-      res,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: '',
-    });
+    next(error);
   }
 };
+
+module.exports = checkDataIntegrity;
